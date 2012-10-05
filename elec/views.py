@@ -27,6 +27,7 @@ from elec.models import Building, Region
 from django.forms import ModelForm, ModelChoiceField, Form, Select, ChoiceField
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
+from django.db.models import Count
 
 class MyModelChoiceField(ModelChoiceField):
 	def label_from_instance(self, obj):
@@ -71,7 +72,11 @@ def formdemo(request):
         	
 		#return render_to_response("basic.html",acontext)
 		
-		aContext = Context({"pagetitle":bldgtitle,"buildings":Building.objects.filter(region=myresponse)})
+		q = Building.objects.filter(region=myresponse)
+		c = q.count()
+		
+		aContext = Context({"pagetitle":bldgtitle, \
+			"buildings":q,"count_bldgs":c})
 			
 		return render_to_response("results_table.html", aContext)
 	else:
