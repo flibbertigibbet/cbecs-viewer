@@ -36,7 +36,7 @@ class MyModelChoiceField(ModelChoiceField):
 # form class
 class DemoForm(Form):
 	Region = MyModelChoiceField(queryset=Region.objects.values_list(), 
-		empty_label=None,required=False)
+		empty_label="All",required=False)
 
 def dbdemo(request):
     b = Building.objects.get(pubid="1")
@@ -51,33 +51,25 @@ def formdemo(request):
 	if request.method == 'POST':
 		form = DemoForm(request.POST)
 		
-		#if form.is_valid():
-		#		return HttpResponseRedirect('/hello/')
-		#else:
-		
 		# get result
-		myresponse = int(request.POST.get('Region')[1])
+		if len(request.POST.get('Region')) > 0:
+			myresponse = int(request.POST.get('Region')[1])
+			b = Building.objects.filter(region=myresponse)
+			areaname = request.POST.get('Region')[6:-2]
+			bldgtitle = "buildings in " + areaname
+			q = Building.objects.filter(region=myresponse)
+			c = q.count()
+			avg = q.aggregate(myavg=Avg('tot_elec'))
 		
-		b = Building.objects.filter(region=myresponse)
-		
-		#resp = ""
-		#for bldg in b:
-		#	resp += "the area is %s sq ft" % bldg.area + "\n"
+			aContext = Context({"pagetitle":bldgtitle, \
+				"buildings":q,"count_bldgs":c, "avg_cons":avg['myavg']})
+		else:
+			c = Building.objects.count()
+			avg = Building.objects.aggregate(myavg=Avg('tot_elec'))
+			bldgtitle = "All buildings"
 			
-		areaname = request.POST.get('Region')[6:-2]
-		bldgtitle = "buildings in " + areaname
-			
-		#acontext = Context({"pagetitle":bldgtitle,
-       # 	"pagecontent":resp})
-        	
-		#return render_to_response("basic.html",acontext)
-		
-		q = Building.objects.filter(region=myresponse)
-		c = q.count()
-		avg = q.aggregate(myavg=Avg('tot_elec'))
-		
 		aContext = Context({"pagetitle":bldgtitle, \
-			"buildings":q,"count_bldgs":c, "avg_cons":avg['myavg']})
+			"buildings":Building.objects.all(),"count_bldgs":c, "avg_cons":avg['myavg']})
 			
 		return render_to_response("results_table.html", aContext)
 	else:
