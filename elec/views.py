@@ -205,14 +205,18 @@ def formdemo(request):
 		#############
 		
 		if avg['myavg'] != None:
-			avg_cons = round(float(avg['myavg']), 2)
+			avg_cons = round(float(avg['myavg']), 3)
 		else:
 			avg_cons = 0
-		avg_price = round(float(avg_price), 2)
+		avg_price = round(float(avg_price), 3)
 		
+		# 3,142 BTUs = 1 kWH
+		avg_cost = round(avg_cons /341.2 * avg_price, 2) # yields avg $/yr on electricity
+				
 		aContext = Context({"pagetitle":"CBECS Results", "bldgtitle":bldgtitle, \
 			"buildings":b,"count_bldgs":c, "avg_cons":avg_cons, \
-			"sqfttitle":sqfttitle,"yrconsttitle":yrconsttitle,"avgprice":avg_price})
+			"sqfttitle":sqfttitle,"yrconsttitle":yrconsttitle,"avgprice":avg_price, \
+			"avg_cost_yr":avg_cost})
 			
 		return render_to_response("results_table.html", aContext)
 	else:

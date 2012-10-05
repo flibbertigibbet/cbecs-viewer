@@ -12,8 +12,9 @@
     	<h4>{{ bldgtitle }} &emsp; {{ sqfttitle }} &emsp; {{ yrconsttitle }}</h4>
     	
     	<h3>Total buildings: {{ count_bldgs }}</h3>
-    	<h3>Average electricity consumption for 2003: {{ avg_cons }} thousand BTUs</h3>
+    	<h3>Average total electricity consumption for 2003: {{ avg_cons }} thousand BTUs</h3>
     	<h3>Average electricity price for region in 2003: {{ avgprice }} cents per kWH</h3>
+    	<h3>Average total electricity cost for 2003: ${{ avg_cost_yr }}</h3>
         {% render_table buildings %}
     </body>
 </html>
