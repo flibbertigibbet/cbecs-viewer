@@ -22,5 +22,6 @@ class Building(models.Model):
     office = models.IntegerField()  #ELOFBTU8 
     computer = models.IntegerField()  #ELPCBTU8 
     misc = models.IntegerField()  #ELMSBTU8 
+    tot_elec = models.IntegerField() # calcuated sum of elec. cost fields
 
 

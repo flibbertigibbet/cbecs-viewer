@@ -27,7 +27,7 @@ from elec.models import Building, Region
 from django.forms import ModelForm, ModelChoiceField, Form, Select, ChoiceField
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
-from django.db.models import Count
+from django.db.models import Count, Avg
 
 class MyModelChoiceField(ModelChoiceField):
 	def label_from_instance(self, obj):
@@ -74,9 +74,10 @@ def formdemo(request):
 		
 		q = Building.objects.filter(region=myresponse)
 		c = q.count()
+		avg = q.aggregate(myavg=Avg('tot_elec'))
 		
 		aContext = Context({"pagetitle":bldgtitle, \
-			"buildings":q,"count_bldgs":c})
+			"buildings":q,"count_bldgs":c, "avg_cons":avg['myavg']})
 			
 		return render_to_response("results_table.html", aContext)
 	else:
