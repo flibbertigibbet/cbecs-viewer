@@ -25,14 +25,16 @@ def hello(request):
 
 from elec.models import Building, CensusDiv
 from django.forms import ModelForm, ModelChoiceField, Form, Select, ChoiceField
+from django.template import RequestContext
+from django.http import HttpResponseRedirect
 
 class MyModelChoiceField(ModelChoiceField):
 	def label_from_instance(self, obj):
-		return obj[0]
+		return obj[1]
 
 # form class
 class DemoForm(Form):
-	CensusDiv = MyModelChoiceField(queryset=CensusDiv.objects.values_list('desc'), 
+	CensusDiv = MyModelChoiceField(queryset=CensusDiv.objects.values_list(), 
 		empty_label=None, label="Census Division",required=False)
 
 def dbdemo(request):
@@ -47,12 +49,21 @@ def hello(request):
 def formdemo(request):
 	if request.method == 'POST':
 		form = DemoForm(request.POST)
-		if form.is_valid():
-			return HttpResponseRedirect('/thanks/')
+		
+		#if form.is_valid():
+		#		return HttpResponseRedirect('/hello/')
+		#else:
+		
+		# get result
+		myresponse = request.POST.get('CensusDiv')
+		acontext = Context({"pagetitle":"you entered",
+        	"pagecontent":myresponse})
+		return render_to_response("basic.html",acontext)
 			
 	else:
 		form = DemoForm() # redirect after POST
 	
 	formcontext = Context({"pagetitle":"form demo",
                        "pagecontent":"Census Division"})		
-	return render_to_response("formdemo.html",{'form':form,})
+	return render_to_response("formdemo.html",{'form':form,}, \
+		context_instance=RequestContext(request))
