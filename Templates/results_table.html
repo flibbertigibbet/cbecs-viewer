@@ -1,7 +1,9 @@
 {# tutorial/templates/people.html #}
 {% load render_table from django_tables2 %}
-<!doctype html>
-<html>
+{% load humanize %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <link rel="stylesheet" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
     </head>
@@ -9,12 +11,12 @@
 	{{ pagetitle }}
 	</title>
     <body>
-    	<h4>{{ bldgtitle }} &emsp; {{ sqfttitle }} &emsp; {{ yrconsttitle }} &emsp; {{ bldg_use }}</h4>
+    	<h4>{{ bldgtitle }} &emsp; {{ sqfttitle|intcomma }} &emsp; {{ yrconsttitle|intcomma }} &emsp; {{ bldg_use|intcomma }}</h4>
     	
-    	<h3>Total buildings: {{ count_bldgs }}</h3>
-    	<h3>Average total electricity consumption for 2003: {{ avg_cons }} thousand BTUs</h3>
-    	<h3>Average electricity price for region in 2003: {{ avgprice }} cents per kWH</h3>
-    	<h3>Average total electricity cost for 2003: ${{ avg_cost_yr }}</h3>
+    	<h3>Total buildings: {{ count_bldgs|intcomma }}</h3>
+    	<h3>Average total electricity consumption for 2003: {{ avg_cons|intcomma }} thousand BTUs</h3>
+    	<h3>Average electricity price for region in 2003: {{ avgprice|intcomma }} cents per kWH</h3>
+    	<h3>Average total electricity cost for 2003: ${{ avg_cost_yr|intcomma }}</h3>
         {% render_table buildings %}
     </body>
 </html>

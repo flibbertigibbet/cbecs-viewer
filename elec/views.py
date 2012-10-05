@@ -7,8 +7,8 @@ welcomepage = """<html>
 Welcome to CBECS Viewer
 </title>
 <body bgcolor="#ddffdd">
-<h1>howdy!</h1>
-This will be the home page.
+<h1>CBECS Data Browser</h1>
+There's a home page.
 </body>
 </html>
 """
@@ -54,7 +54,7 @@ def dbdemo(request):
 def hello(request):
     return render_to_response("basic.html",thecontext)
 
-def formdemo(request):
+def cbecs(request):
 	if request.method == 'POST':
 		form = DemoForm(request.POST)
 		
@@ -232,5 +232,5 @@ def formdemo(request):
 	
 	formcontext = Context({"pagetitle":"form demo",
                        "pagecontent":"Census Division"})		
-	return render_to_response("formdemo.html",{'form':form,}, \
+	return render_to_response("cbecs.html",{'form':form,}, \
 		context_instance=RequestContext(request))
