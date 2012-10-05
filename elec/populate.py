@@ -50,6 +50,7 @@ for line in data[1:]:
     cmd = template % interptuple
     print cmd
     c.execute(cmd)
-    
+    conn.commit()
+conn.close()    
 
 
