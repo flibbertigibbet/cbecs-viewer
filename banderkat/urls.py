@@ -4,7 +4,7 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-from elec.views import hello,dbdemo
+from elec.views import hello,dbdemo,formdemo
 
 urlpatterns = patterns('',
     # Examples:
@@ -19,5 +19,6 @@ urlpatterns = patterns('',
 
     url(r'^$',hello),
     url(r'^dbdemo/$',dbdemo),
+	url(r'^formdemo/$',formdemo),
 
 )

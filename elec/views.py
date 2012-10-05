@@ -23,7 +23,17 @@ def hello(request):
     return HttpResponse(welcomepage)
 """
 
-from elec.models import Building
+from elec.models import Building, CensusDiv
+from django.forms import ModelForm, ModelChoiceField, Form, Select, ChoiceField
+
+class MyModelChoiceField(ModelChoiceField):
+	def label_from_instance(self, obj):
+		return obj[0]
+
+# form class
+class DemoForm(Form):
+	CensusDiv = MyModelChoiceField(queryset=CensusDiv.objects.values_list('desc'), 
+		empty_label=None, label="Census Division",required=False)
 
 def dbdemo(request):
     b = Building.objects.get(pubid="1")
@@ -34,3 +44,15 @@ def dbdemo(request):
 def hello(request):
     return render_to_response("basic.html",thecontext)
 
+def formdemo(request):
+	if request.method == 'POST':
+		form = DemoForm(request.POST)
+		if form.is_valid():
+			return HttpResponseRedirect('/thanks/')
+			
+	else:
+		form = DemoForm() # redirect after POST
+	
+	formcontext = Context({"pagetitle":"form demo",
+                       "pagecontent":"Census Division"})		
+	return render_to_response("formdemo.html",{'form':form,})

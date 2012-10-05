@@ -20,3 +20,6 @@ class Building(models.Model):
     computer = models.IntegerField()  #ELPCBTU8 
     misc = models.IntegerField()  #ELMSBTU8 
 
+class CensusDiv(models.Model):
+	desc = models.CharField(max_length=50)
+	
