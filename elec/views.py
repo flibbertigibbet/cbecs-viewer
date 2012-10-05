@@ -23,7 +23,7 @@ def hello(request):
     return HttpResponse(welcomepage)
 """
 
-from elec.models import Building, CensusDiv
+from elec.models import Building, Region
 from django.forms import ModelForm, ModelChoiceField, Form, Select, ChoiceField
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -34,8 +34,8 @@ class MyModelChoiceField(ModelChoiceField):
 
 # form class
 class DemoForm(Form):
-	CensusDiv = MyModelChoiceField(queryset=CensusDiv.objects.values_list(), 
-		empty_label=None, label="Census Division",required=False)
+	Region = MyModelChoiceField(queryset=Region.objects.values_list(), 
+		empty_label=None,required=False)
 
 def dbdemo(request):
     b = Building.objects.get(pubid="1")
@@ -55,11 +55,25 @@ def formdemo(request):
 		#else:
 		
 		# get result
-		myresponse = request.POST.get('CensusDiv')
-		acontext = Context({"pagetitle":"you entered",
-        	"pagecontent":myresponse})
-		return render_to_response("basic.html",acontext)
+		myresponse = int(request.POST.get('Region')[1])
+		
+		b = Building.objects.filter(region=myresponse)
+		
+		#resp = ""
+		#for bldg in b:
+		#	resp += "the area is %s sq ft" % bldg.area + "\n"
 			
+		areaname = request.POST.get('Region')[6:-2]
+		bldgtitle = "buildings in " + areaname
+			
+		#acontext = Context({"pagetitle":bldgtitle,
+       # 	"pagecontent":resp})
+        	
+		#return render_to_response("basic.html",acontext)
+		
+		aContext = Context({"pagetitle":bldgtitle,"buildings":Building.objects.filter(region=myresponse)})
+			
+		return render_to_response("results_table.html", aContext)
 	else:
 		form = DemoForm() # redirect after POST
 	

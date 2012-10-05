@@ -1,0 +1,15 @@
+{# tutorial/templates/people.html #}
+{% load render_table from django_tables2 %}
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
+    </head>
+    <title>
+	{{ pagetitle }}
+	</title>
+    <body>
+    	<h1>{{ pagetitle }}</h1>
+        {% render_table buildings %}
+    </body>
+</html>
