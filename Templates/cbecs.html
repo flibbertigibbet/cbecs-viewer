@@ -3,21 +3,35 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <style type="text/css">
-table.ex1 {table-layout:auto}
+table.ex1 {table-layout:auto; text-align:center;border-collapse: collapse;
+	margin-left:auto;  margin-right:auto;}
+table td, table th {padding: 100;}
+.two {width: 100px; height: 30px;}
+.three {width: 500px; height: 40px;}
+h1 {text-align:center}
+p {text-align:center; padding:0cm 4cm 0cm 4cm;}
 </style>
 </head>
 <title>Search CBECS</title>
+<h1>Search Commercial Building Energy Consumption Survey Buildings</h1>
+<p>This tool may be used to find approximate energy consumption for a building by searching for
+	buildings in the 2003 CBECS with similar characteristics.  The tool also finds the historic average
+	commercial electricity retail price for the selected region from the U.S. Energy Information Administration.
+</p>
 <form action="/cbecs/" method="post">{% csrf_token %}
-<table class="ex1" border="1" width="80%">
+<table class="ex1" border="1"; width="70%">
 {% for field in form %}
 	<tr>
         <div class="fieldWrapper">
             {{ field.errors }}
-            <td>{{ field.label_tag }}</td> &emsp; <td>{{ field }}</td>
+            <td>{{ field.label_tag }}</td> &emsp; <td class="three">{{ field }}</td>
         </div>
 {% endfor %}
 	</tr>
 </table>
 <br />
-<input type="submit" value="Submit" />
+<p>
+<input type="submit" class="two" value="Submit" />
+</p>
 </form>
+</html>

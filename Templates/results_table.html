@@ -6,17 +6,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <link rel="stylesheet" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
+        <style type="text/css">
+			table.ex1 {table-layout:auto}
+			h4 {text-align:center}
+		</style>
     </head>
     <title>
 	{{ pagetitle }}
 	</title>
     <body>
-    	<h4>{{ bldgtitle }} &emsp; {{ sqfttitle|intcomma }} &emsp; {{ yrconsttitle|intcomma }} &emsp; {{ bldg_use|intcomma }}</h4>
+    	<table class="ex1" border="1" width="100%">
+    	<tr><td><h3>{{ bldgtitle }}</h3></td><td><h3>{{ sqfttitle|intcomma }}</h3></td></tr><tr><td><h3>
+    		{{ yrconsttitle|intcomma }}</h3></td><td><h3>{{ bldg_use|intcomma }}</h3></td></tr>
+    	</table>
+    	<br /><br />
     	
-    	<h3>Total buildings: {{ count_bldgs|intcomma }}</h3>
-    	<h3>Average total electricity consumption for 2003: {{ avg_cons|intcomma }} thousand BTUs</h3>
-    	<h3>Average electricity price for region in 2003: {{ avgprice|intcomma }} cents per kWH</h3>
-    	<h3>Average total electricity cost for 2003: ${{ avg_cost_yr|intcomma }}</h3>
+    	<table class="ex1" border="1" width="100%">
+    	<tr><td><h3>Total buildings: {{ count_bldgs|intcomma }}</h3></td>
+    	<td><h3>Average total electricity consumption for 2003: {{ avg_cons|intcomma }} thousand BTUs</h3></td></tr>
+    	<tr><td><h3>Average electricity price for region in 2003: {{ avgprice|intcomma }} cents per kWH</h3></td>
+    	<td><h3>Average total electricity cost for 2003: ${{ avg_cost_yr|intcomma }}</h3></td></tr>
+    	</table>
+    	<br /><br />
+    	<table class="ex1" table-layout="auto" text-align="center"
+    		border-collapse="collapse" margin-left="auto"  margin-right="auto"}
         {% render_table buildings %}
+        </table>
     </body>
 </html>
