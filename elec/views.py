@@ -23,7 +23,7 @@ def hello(request):
     return HttpResponse(welcomepage)
 """
 
-from elec.models import Building, Region
+from elec.models import Building, Regions, SqftCat, YearConstructed
 from django.forms import ModelForm, ModelChoiceField, Form, Select, ChoiceField
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -35,9 +35,13 @@ class MyModelChoiceField(ModelChoiceField):
 
 # form class
 class DemoForm(Form):
-	Region = MyModelChoiceField(queryset=Region.objects.values_list(), 
-		empty_label="All",required=False)
-
+	Regions = MyModelChoiceField(queryset=Regions.objects.values_list(), 
+		empty_label="All",required=False, label="Region")
+	SqftCat = MyModelChoiceField(queryset=SqftCat.objects.values_list(), 
+		empty_label="All",required=False, label="Square footage")
+	YearConstructed = MyModelChoiceField(queryset=YearConstructed.objects.values_list(), 
+		empty_label="All",required=False, label="Year Constructed")
+	
 def dbdemo(request):
     b = Building.objects.get(pubid="1")
     dbcontext = Context({"pagetitle":"DB demo",
@@ -51,25 +55,37 @@ def formdemo(request):
 	if request.method == 'POST':
 		form = DemoForm(request.POST)
 		
-		# get result
-		if len(request.POST.get('Region')) > 0:
-			myresponse = int(request.POST.get('Region')[1])
-			b = Building.objects.filter(region=myresponse)
-			areaname = request.POST.get('Region')[6:-2]
-			bldgtitle = "buildings in " + areaname
-			q = Building.objects.filter(region=myresponse)
-			c = q.count()
-			avg = q.aggregate(myavg=Avg('tot_elec'))
+		# get results
+		# default to all
+		b = Building.objects.all()
+		c = Building.objects.count()
+		avg = Building.objects.aggregate(myavg=Avg('tot_elec'))
+		bldgtitle = "All buildings"
+		sqfttitle = "All sizes"
+		yrconsttitle = "All years"
 		
-			aContext = Context({"pagetitle":bldgtitle, \
-				"buildings":q,"count_bldgs":c, "avg_cons":avg['myavg']})
-		else:
-			c = Building.objects.count()
-			avg = Building.objects.aggregate(myavg=Avg('tot_elec'))
-			bldgtitle = "All buildings"
+		if len(request.POST.get('Regions')) > 0:
+			myresponse = int(request.POST.get('Regions')[1])
+			b = Building.objects.filter(region=myresponse)
+			areaname = request.POST.get('Regions')[6:-2]
+			bldgtitle = "Buildings in: " + areaname
 			
-		aContext = Context({"pagetitle":bldgtitle, \
-			"buildings":Building.objects.all(),"count_bldgs":c, "avg_cons":avg['myavg']})
+		if len(request.POST.get('YearConstructed')) > 0:
+			resp = int(request.POST.get('YearConstructed')[1])
+			b = b.filter(yrcon=resp)
+			yrconsttitle = "Year constructed: " + request.POST.get('YearConstructed')[6:-2]
+			
+		if len(request.POST.get('SqftCat')) > 0:
+			resp = int(request.POST.get('SqftCat')[1])
+			b = b.filter(area_cat=resp)
+			sqfttitle = "Square footage: " + request.POST.get('SqftCat')[6:-2]
+			
+		c = b.count()
+		avg = b.aggregate(myavg=Avg('tot_elec'))
+		
+		aContext = Context({"pagetitle":"Search CBECS", "bldgtitle":bldgtitle, \
+			"buildings":b,"count_bldgs":c, "avg_cons":avg['myavg'], \
+			"sqfttitle":sqfttitle,"yrconsttitle":yrconsttitle})
 			
 		return render_to_response("results_table.html", aContext)
 	else:

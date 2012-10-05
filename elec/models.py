@@ -2,9 +2,15 @@ from django.db import models
 
 # Create your models here.
 
-class Region(models.Model):
-	desc = models.CharField(max_length=50)
-
+class Regions(models.Model):
+	desc = models.CharField(max_length=100)
+	
+class SqftCat(models.Model):
+	desc = models.CharField(max_length=100)
+	
+class YearConstructed(models.Model):
+	desc = models.CharField(max_length=100)
+	
 class Building(models.Model):
     pubid = models.IntegerField() #PUBID8
     activity = models.IntegerField() #PBA8

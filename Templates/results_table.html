@@ -9,7 +9,10 @@
 	{{ pagetitle }}
 	</title>
     <body>
-    	<h1>{{ pagetitle }}</h1>
+    	<h3>{{ bldgtitle }}</h3>
+    	<h3>{{ sqfttitle }}</h3>
+    	<h3>{{ yrconsttitle }}</h3>
+    	
     	<h2>Total buildings: {{ count_bldgs }}</h2>
     	<h2>Average electricity consumption: {{ avg_cons }}</h2>
         {% render_table buildings %}
