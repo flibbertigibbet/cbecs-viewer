@@ -23,7 +23,7 @@ def hello(request):
     return HttpResponse(welcomepage)
 """
 
-from elec.models import Building, Regions, SqftCat, YearConstructed
+from elec.models import Building, Regions, SqftCat, YearConstructed, BuildingUse
 from django.forms import ModelForm, ModelChoiceField, Form, Select, ChoiceField
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -42,6 +42,8 @@ class DemoForm(Form):
 		empty_label="All",required=False, label="Square footage")
 	YearConstructed = MyModelChoiceField(queryset=YearConstructed.objects.values_list(), 
 		empty_label="All",required=False, label="Year Constructed")
+	BuildingUse = MyModelChoiceField(queryset=BuildingUse.objects.values_list(), 
+		empty_label="All",required=False, label="Building Use")
 	
 def dbdemo(request):
     b = Building.objects.get(pubid="1")
@@ -64,6 +66,7 @@ def formdemo(request):
 		bldgtitle = "All regions"
 		sqfttitle = "All sizes"
 		yrconsttitle = "All years"
+		bldgusetitle = "All uses"
 		
 		myresponse = 0
 		if len(request.POST.get('Regions')) > 0:
@@ -81,6 +84,11 @@ def formdemo(request):
 			resp = int(request.POST.get('SqftCat')[1])
 			b = b.filter(area_cat=resp)
 			sqfttitle = "Square footage: " + request.POST.get('SqftCat')[6:-2]
+			
+		if len(request.POST.get('BuildingUse')) > 0:
+			resp = int(request.POST.get('BuildingUse')[1])
+			b = b.filter(activity=resp)
+			bldgusetitle = "Building Use: " + (request.POST.get('BuildingUse')[6:-2]).strip("'")
 			
 		c = b.count()
 		avg = b.aggregate(myavg=Avg('tot_elec'))
@@ -214,7 +222,7 @@ def formdemo(request):
 		avg_cost = round(avg_cons /341.2 * avg_price, 2) # yields avg $/yr on electricity
 				
 		aContext = Context({"pagetitle":"CBECS Results", "bldgtitle":bldgtitle, \
-			"buildings":b,"count_bldgs":c, "avg_cons":avg_cons, \
+			"buildings":b,"count_bldgs":c, "avg_cons":avg_cons, "bldg_use":bldgusetitle, \
 			"sqfttitle":sqfttitle,"yrconsttitle":yrconsttitle,"avgprice":avg_price, \
 			"avg_cost_yr":avg_cost})
 			

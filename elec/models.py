@@ -11,6 +11,9 @@ class SqftCat(models.Model):
 class YearConstructed(models.Model):
 	desc = models.CharField(max_length=100)
 	
+class BuildingUse(models.Model):
+	desc = models.CharField(max_length=100)
+	
 class Building(models.Model):
     pubid = models.IntegerField() #PUBID8
     activity = models.IntegerField() #PBA8
@@ -29,5 +32,3 @@ class Building(models.Model):
     computer = models.IntegerField()  #ELPCBTU8 
     misc = models.IntegerField()  #ELMSBTU8 
     tot_elec = models.IntegerField() # calcuated sum of elec. cost fields
-
-
