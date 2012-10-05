@@ -204,7 +204,10 @@ def formdemo(request):
 			avg_price = (float(avg1) + float(avg2) + float(avg3)) / 3.0
 		#############
 		
-		avg_cons = round(float(avg['myavg']), 2)
+		if avg['myavg'] != None:
+			avg_cons = round(float(avg['myavg']), 2)
+		else:
+			avg_cons = 0
 		avg_price = round(float(avg_price), 2)
 		
 		aContext = Context({"pagetitle":"CBECS Results", "bldgtitle":bldgtitle, \
